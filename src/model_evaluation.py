@@ -30,9 +30,8 @@ file_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
-"""
 def load_params(params_path: str) -> dict:
-    Load parameters from a YAML file.
+    """Load parameters from a YAML file."""
     try:
         with open(params_path, 'r') as file:
             params = yaml.safe_load(file)
@@ -48,7 +47,6 @@ def load_params(params_path: str) -> dict:
         logger.error('Unexpected error: %s', e)
         raise
 
-    """
 
 def load_model(file_path: str):
     """Load the trained model from a file."""
@@ -115,7 +113,7 @@ def save_metrics(metrics: dict, file_path: str) -> None:
 
 def main():
     try:
-       # params = load_params(params_path='params.yaml')
+        params = load_params(params_path='params.yaml')
         clf = load_model('./models/model.pkl')
         test_data = load_data('./data/processed/test_tfidf.csv')
         
@@ -124,14 +122,14 @@ def main():
 
         metrics = evaluate_model(clf, X_test, y_test)
 
-        '''
+        
         # Experiment tracking using dvclive
         with Live(save_dvc_exp=True) as live:
             live.log_metric('accuracy', accuracy_score(y_test, y_test))
             live.log_metric('precision', precision_score(y_test, y_test))
             live.log_metric('recall', recall_score(y_test, y_test))
 
-            live.log_params(params)        '''
+            live.log_params(params)        
         
         save_metrics(metrics, 'reports/metrics.json')
     except Exception as e:
