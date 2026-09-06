@@ -1,0 +1,84 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python src/data_ingestion.py
+    deps:
+    - path: src/data_ingestion.py
+      hash: md5
+      md5: 733b6a2255b4b2603dcc53b93ea3d3f3
+      size: 3639
+    outs:
+    - path: data/raw
+      hash: md5
+      md5: 1a287d34dc172d9f950c03dae35f7e73.dir
+      size: 484846
+      nfiles: 2
+  data_preprocessing:
+    cmd: python src/data_preprocessing.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 1a287d34dc172d9f950c03dae35f7e73.dir
+      size: 484846
+      nfiles: 2
+    - path: src/data_preprocessing.py
+      hash: md5
+      md5: ae0059b79590609927f72e3c373f1865
+      size: 3973
+    outs:
+    - path: data/interim
+      hash: md5
+      md5: 095c39a135aaa52ea387aa07dc186926.dir
+      size: 260230
+      nfiles: 2
+  feature_engineering:
+    cmd: python src/feature_engineering.py
+    deps:
+    - path: data/interim
+      hash: md5
+      md5: 095c39a135aaa52ea387aa07dc186926.dir
+      size: 260230
+      nfiles: 2
+    - path: src/feature_engineering.py
+      hash: md5
+      md5: a50ed742cbe2361b7dd656fd24bbe35a
+      size: 3910
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: edcd272ac021e54b6b212a49bdff5dd7.dir
+      size: 1180011
+      nfiles: 2
+  model_training:
+    cmd: python src/model_training.py
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: edcd272ac021e54b6b212a49bdff5dd7.dir
+      size: 1180011
+      nfiles: 2
+    - path: src/model_training.py
+      hash: md5
+      md5: 26583705397dd74b7e9a5b68af57fef6
+      size: 4481
+    outs:
+    - path: models/model.pkl
+      hash: md5
+      md5: 582a8928877b8f8f58632faedf9461d8
+      size: 998473
+  model_evaluation:
+    cmd: python src/model_evaluation.py
+    deps:
+    - path: models/model.pkl
+      hash: md5
+      md5: 582a8928877b8f8f58632faedf9461d8
+      size: 998473
+    - path: src/model_evaluation.py
+      hash: md5
+      md5: 8c871ffa91037f8738b264ca7b757f86
+      size: 4674
+    outs:
+    - path: reports/metrics.json
+      hash: md5
+      md5: eac6afc8901064a391e7366797af3727
+      size: 145
